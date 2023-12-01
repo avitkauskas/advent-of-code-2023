@@ -18,8 +18,7 @@ puts "Part 1: #{sum}"
 def clean_line(line)
   line
     .scan(/(?=(\d|one|two|three|four|five|six|seven|eight|nine))/)
-    .map(&.captures)
-    .flatten
+    .map(&.[1])
     .join
     .gsub(/(one|two|three|four|five|six|seven|eight|nine)/,
       {one: "1", two: "2", three: "3",
