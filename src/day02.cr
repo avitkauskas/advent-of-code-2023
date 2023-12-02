@@ -58,7 +58,7 @@ def minimum_cubes(game)
 end
 
 def power(cubes)
-  cubes.values.reduce { |acc, v| acc * v }
+  cubes.values.product
 end
 
 sum = games.map { |game| power minimum_cubes(game) }.sum
