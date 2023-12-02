@@ -7,21 +7,15 @@ class Game
 end
 
 def parse_id(game_string)
-  if m = game_string.match(/Game (\d+)/)
-    m[1].to_i
-  else
-    0
-  end
+  m = game_string.match(/Game (\d+)/)
+  m ? m[1].to_i : 0
 end
 
 def parse_cubes(cubes_string)
   cubes_hash = {} of String => Int32
   {"red", "blue", "green"}.each do |colour|
-    if m = cubes_string.match(/(\d+) #{colour}/)
-      cubes_hash[colour] = m[1].to_i
-    else
-      cubes_hash[colour] = 0
-    end
+    m = cubes_string.match(/(\d+) #{colour}/)
+    cubes_hash[colour] = m ? m[1].to_i : 0
   end
   cubes_hash
 end
@@ -34,8 +28,6 @@ def parse_game(game_string)
   Game.new(id, draws)
 end
 
-games = File.read_lines("input/input02.txt").map { |line| parse_game line }
- 
 MAX_CUBES = {"red" => 12, "green" => 13, "blue" => 14}
 
 def possible_draw(draw)
@@ -44,6 +36,8 @@ def possible_draw(draw)
   return false if draw["green"] > MAX_CUBES["green"]
   true
 end
+
+games = File.read_lines("input/input02.txt").map { |line| parse_game line }
 
 possible_games = games.select do |game|
   game.draws.all? { |draw| possible_draw draw }
@@ -67,6 +61,6 @@ def power(cubes)
   cubes.values.reduce { |acc, v| acc * v }
 end
 
-sum = games.map { |game| power(minimum_cubes game)}.sum
+sum = games.map { |game| power minimum_cubes(game) }.sum
 
 puts "Part 2: #{sum}"
