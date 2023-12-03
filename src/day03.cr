@@ -19,7 +19,7 @@ class Schematic
   def symbol_around?(row, col)
     neighbors(row, col).each do |coords|
       cell = @field[coords[0]][coords[1]]
-      if !cell.ascii_number? && cell != '.'
+      if !cell.number? && cell != '.'
         return true
       end
     end
@@ -34,7 +34,7 @@ class Schematic
     (0...@rows).each do |row|
       (0...@cols).each do |col|
         cell = @field[row][col]
-        if cell.ascii_number?
+        if cell.number?
           if col == 0
             if in_num && is_part
               parts << num.to_i
@@ -43,7 +43,7 @@ class Schematic
             num = ""
           end
           in_num = true
-          is_part |= symbol_around?(row, col)
+          is_part ||= symbol_around?(row, col)
           num += cell
         else
           if in_num && is_part
@@ -76,7 +76,7 @@ class Schematic
     (0...@rows).each do |row|
       (0...@cols).each do |col|
         cell = @field[row][col]
-        if cell.ascii_number?
+        if cell.number?
           if col == 0
             if in_num && gear
               gears[gear] = gears[gear] << num.to_i
@@ -85,7 +85,7 @@ class Schematic
             num = ""
           end
           in_num = true
-          gear = gear_around(row, col) unless gear
+          gear ||= gear_around(row, col)
           num += cell
         else
           if in_num && gear
