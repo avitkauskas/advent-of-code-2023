@@ -2,15 +2,15 @@ class Garden
   getter seeds
   getter seed_ranges
 
-  @seeds : Array(Int64)
-  @seed_ranges : Array(Range(Int64, Int64))
-  @seed_to_soil_map : Array(NamedTuple(source: Range(Int64, Int64), destination: Range(Int64, Int64)))
-  @soil_to_fertilizer_map : Array(NamedTuple(source: Range(Int64, Int64), destination: Range(Int64, Int64)))
-  @fertilizer_to_water_map : Array(NamedTuple(source: Range(Int64, Int64), destination: Range(Int64, Int64)))
-  @water_to_light_map : Array(NamedTuple(source: Range(Int64, Int64), destination: Range(Int64, Int64)))
-  @light_to_temperture_map : Array(NamedTuple(source: Range(Int64, Int64), destination: Range(Int64, Int64)))
-  @temperature_to_humidity_map : Array(NamedTuple(source: Range(Int64, Int64), destination: Range(Int64, Int64)))
-  @humidity_to_location_map : Array(NamedTuple(source: Range(Int64, Int64), destination: Range(Int64, Int64)))
+  @seeds = [] of Int64
+  @seed_ranges = [] of Range(Int64, Int64)
+  @seed_to_soil_map = [] of {source: Range(Int64, Int64), destination: Range(Int64, Int64)}
+  @soil_to_fertilizer_map = [] of {source: Range(Int64, Int64), destination: Range(Int64, Int64)}
+  @fertilizer_to_water_map = [] of {source: Range(Int64, Int64), destination: Range(Int64, Int64)}
+  @water_to_light_map = [] of {source: Range(Int64, Int64), destination: Range(Int64, Int64)}
+  @light_to_temperture_map = [] of {source: Range(Int64, Int64), destination: Range(Int64, Int64)}
+  @temperature_to_humidity_map = [] of {source: Range(Int64, Int64), destination: Range(Int64, Int64)}
+  @humidity_to_location_map = [] of {source: Range(Int64, Int64), destination: Range(Int64, Int64)}
 
   def initialize(filename)
     almanac = File.read(filename).strip.split("\n\n")
