@@ -13,7 +13,7 @@ end
 def hand_type_with_joker(hand)
   tally = hand[:cards].tally
   jockers = tally.delete('J') || 0
-  return [5] if jockers == 5
+  return [jockers] if tally.empty?
   type = tally.values.sort!.reverse!
   type[0] += jockers
   type
