@@ -1,5 +1,3 @@
-require "big"
-
 moves, maps = File.read("input/input08.txt").split("\n\n")
 
 moves = moves.chars.map { |c| c == 'L' ? 0 : 1 }
@@ -20,13 +18,12 @@ puts "Part 1: #{ans}"
 nodes = maps.keys.select { |k| k.ends_with?("A") }
 
 steps = nodes.map_with_index do |node, i|
-  n = 0
+  n = 0_i64
   moves.cycle do |move|
     node = maps[node][move]
     n += 1
-    break if node.ends_with?("Z")
+    break n if node.ends_with?("Z")
   end
-  BigInt.new(n)
 end
 
 ans = steps.reduce { |res, n| res.lcm(n) }
