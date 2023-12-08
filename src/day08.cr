@@ -2,8 +2,10 @@ moves, maps = File.read("input/input08.txt").split("\n\n")
 
 moves = moves.chars.map { |c| c == 'L' ? 0 : 1 }
 
-maps = maps.lines.map &.scan(/[0-9A-Z]+/).map(&.[0])
-maps = Hash.zip(maps.map(&.[0]), maps.map { |(_, l, r)| [l, r] })
+maps = maps.lines.to_h do |line|
+  from, left, right = line.scan(/[0-9A-Z]+/).map(&.[0])
+  {from, [left, right]}
+end
 
 ans = 0
 node = "AAA"
