@@ -7,7 +7,7 @@ def solution(histories, dir)
       seq << seq.last.each_cons_pair.map { |a, b| b - a }.to_a
     end
     if dir == :prev
-      seq.map(&.first).reverse!.reduce(0) { |acc, e| e - acc}
+      seq.map(&.first).reverse!.reduce { |acc, e| e - acc}
     else
       seq.map(&.last).sum
     end
