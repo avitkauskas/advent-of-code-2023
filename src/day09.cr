@@ -2,15 +2,12 @@ histories = File.read_lines("input/input09.txt").map(&.split.map(&.to_i))
 
 def solution(histories, dir)
   histories.sum do |history|
+    history.reverse! if dir == :prev
     seq = [history]
     while !seq.last.all?(0)
       seq << seq.last.each_cons_pair.map { |a, b| b - a }.to_a
     end
-    if dir == :prev
-      seq.map(&.first).reverse!.reduce { |acc, e| e - acc}
-    else
-      seq.map(&.last).sum
-    end
+    seq.map(&.last).sum
   end
 end
 
