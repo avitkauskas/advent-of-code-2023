@@ -26,6 +26,7 @@ end
 
 def find_loop(field)
   start = coords = get_start_coords(field)
+  # HACK: this is only possible because the start cell is 'L'
   move = {-1, 0}
   path = [start]
   loop do
@@ -81,6 +82,7 @@ path.each do |(r,c)|
 end
 
 r, c = get_start_coords(field)
+# HACK: 'L' is just for my map
 clean_field[r][c] = 'L'
 
 expanded_lines = Array(Array(Char)).new 
