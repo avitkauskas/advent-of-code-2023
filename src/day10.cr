@@ -16,40 +16,23 @@ MOVES = {
 }
 
 def get_start_coords(field)
-  start_coords = {0,0}
-  r = 0
-  while r < field.size
-    c = 0
-    while c < field[0].size
-      if field[r][c] == 'S'
-        start_coords = {r, c}
-        break
-      end
-      c += 1
+  field.size.times do |r|
+    field[0].size.times do |c|
+      return {r, c} if field[r][c] == 'S'
     end
-    r += 1
   end
-  start_coords
-end
-
-def make_move(coords, move)
-  {coords[0] + move[0], coords[1] + move[1]}
-end
-
-def get_cell(field, coords)
-  r, c = coords
-  field[r][c]
+  {0,0}
 end
 
 def find_loop(field)
   start = coords = get_start_coords(field)
-  path = [start]
   move = {-1, 0}
+  path = [start]
   loop do
-    coords = make_move(coords, move)
+    coords = {coords[0] + move[0], coords[1] + move[1]}
     break path if coords == start
     path << coords
-    cell = get_cell(field, coords)
+    cell = field[coords[0]][coords[1]]
     move = MOVES[{cell, move}]
   end
 end
@@ -141,7 +124,7 @@ def flud_field(field)
     { {0,-1},{-1,0},{0,1},{1,0} }.each do |r, c|
       nr, nc = {row + r, col + c}
       new_cell = {nr, nc}
-      if new_cell[0].in?(rows) && new_cell[1].in?(cols) && field[nr][nc] != '*' && !seen.includes?(new_cell)
+      if nr.in?(rows) && nc.in?(cols) && field[nr][nc] != '*' && !seen.includes?(new_cell)
         next_cells << new_cell
       end
     end
