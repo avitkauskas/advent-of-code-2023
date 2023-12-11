@@ -10,6 +10,7 @@ end
 def expand_galaxies(galaxies, expansion_times)
   expansion = expansion_times - 1
   galaxies = galaxies.dup
+
   rows = galaxies.max_of &.[0]
   cols = galaxies.max_of &.[1]
 
