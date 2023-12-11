@@ -7,7 +7,7 @@ lines.each_with_index do |row, r|
   end
 end
 
-def expand_galaxies(galaxies, expansion_times)
+def sum_distancies(galaxies, expansion_times)
   expansion = expansion_times - 1
   galaxies = galaxies.dup
 
@@ -29,17 +29,13 @@ def expand_galaxies(galaxies, expansion_times)
     end
   end
   
-  galaxies
+  galaxies.each_combination(2).sum do |((r1, c1), (r2, c2))|
+    (r1 - r2).abs + (c1 - c2).abs
+  end
 end
 
-ans = expand_galaxies(galaxies, 2).each_combination(2).sum do |(g1, g2)|
-  (g1[0] - g2[0]).abs + (g1[1] - g2[1]).abs
-end
-
+ans = sum_distancies(galaxies, 2)
 puts "Part 1: #{ans}"
 
-ans = expand_galaxies(galaxies, 1_000_000).each_combination(2).sum do |(g1, g2)|
-  (g1[0] - g2[0]).abs + (g1[1] - g2[1]).abs
-end
-
+ans = sum_distancies(galaxies, 1_000_000)
 puts "Part 2: #{ans}"
