@@ -1,6 +1,6 @@
 input = File.read_lines("input/input14.txt").map &.chars
 
-def empty_north(platform, row, col)
+def empty_cell(platform, row, col)
   row -= 1
   while row >= 0 && platform[row][col] == '.'
     row -= 1
@@ -8,35 +8,11 @@ def empty_north(platform, row, col)
   row + 1
 end
 
-def empty_south(platform, row, col)
-  row += 1
-  while row < platform.size && platform[row][col] == '.'
-    row += 1
-  end
-  row - 1
-end
-
-def empty_west(platform, row, col)
-  col -= 1
-  while col >= 0 && platform[row][col] == '.'
-    col -= 1
-  end
-  col + 1
-end
-
-def empty_east(platform, row, col)
-  col += 1
-  while col < platform[0].size && platform[row][col] == '.'
-    col += 1
-  end
-  col - 1
-end
-
-def north(platform)
+def tilt(platform)
   1.to(platform.size - 1) do |row|
     0.to(platform[0].size - 1) do |col|
       if platform[row][col] == 'O'
-        r = empty_north(platform, row, col)
+        r = empty_cell(platform, row, col)
         if r < row
           platform[r][col] = 'O'
           platform[row][col] = '.'
@@ -47,56 +23,15 @@ def north(platform)
   platform
 end
 
-def south(platform)
-  (platform.size - 2).to(0) do |row|
-    0.to(platform[0].size - 1) do |col|
-      if platform[row][col] == 'O'
-        r = empty_south(platform, row, col)
-        if r > row
-          platform[r][col] = 'O'
-          platform[row][col] = '.'
-        end
-      end
-    end
-  end
-  platform
-end
-
-def west(platform)
-  1.to(platform[0].size - 1) do |col|
-    0.to(platform.size - 1) do |row|
-      if platform[row][col] == 'O'
-        c = empty_west(platform, row, col)
-        if c < col
-          platform[row][c] = 'O'
-          platform[row][col] = '.'
-        end
-      end
-    end
-  end
-  platform
-end
-
-def east(platform)
-  (platform[0].size - 2).to(0) do |col|
-    0.to(platform.size - 1) do |row|
-      if platform[row][col] == 'O'
-        c = empty_east(platform, row, col)
-        if c > col
-          platform[row][c] = 'O'
-          platform[row][col] = '.'
-        end
-      end
-    end
-  end
-  platform
+def rotate(platform)
+  (0...platform[0].size).map { |i| platform.map(&.[i]).reverse}
 end
 
 def cycle(platform)
-  platform = north(platform)
-  platform = west(platform)
-  platform = south(platform)
-  platform = east(platform)
+  4.times do
+    platform = tilt(platform)
+    platform = rotate(platform)
+  end
   platform
 end
 
@@ -112,8 +47,13 @@ def load(platform)
   load
 end
 
+def show(platform)
+  platform.each { |line| puts line.join }
+  puts
+end
+
 platform = input.clone
-ans = load(north(platform))
+ans = load(tilt(platform))
 
 puts "Part 1: #{ans}"
 
