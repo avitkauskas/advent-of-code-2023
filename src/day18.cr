@@ -27,8 +27,8 @@ def area(vertices)
   while i < vertices.size - 2
     x1, y1 = vertices[i]
     x2, y2 = vertices[i + 1]
-    dx1, dy1 = x1 - x, y1 - x
-    dx2, dy2 = x2 - x, y2 - x
+    dx1, dy1 = x1 - x, y1 - y
+    dx2, dy2 = x2 - x, y2 - y
     cross = dx1 * dy2 - dx2 * dy1
     area += cross
     i += 1
