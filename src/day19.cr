@@ -2,13 +2,12 @@ rules, parts = File.read("input/input19.txt").split("\n\n")
 
 rules = rules.lines.map do |line|
   name, rules = line.split('{')
-  rules = rules.chomp('}').split(',')
-  rules = rules.map do |rule|
+  rules = rules.chomp('}').split(',').map do |rule|
     if rule.includes? ':'
       _, typ, op, val, nxt = rule.match! /(.)([><])(\d+):(\w+)/
-      {typ: typ, op: op, val: val.to_i, nxt: nxt}
+      {typ, op, val.to_i, nxt}
     else
-      {typ: "z", op: "<", val: 1, nxt: rule}
+      {"z", "<", 1, rule}
     end
   end
   {name, rules}
@@ -26,9 +25,9 @@ ops = {"<" => ->(a : Int32, b : Int32) { a < b },
 parts.each_with_index do |part, i|
   flow = "in"
   while flow != "A" && flow != "R"
-    rules[flow].each do |rule|
-      if ops[rule[:op]].call(part[rule[:typ]], rule[:val])
-        flow = rule[:nxt]
+    rules[flow].each do |typ, op, val, nxt|
+      if ops[op].call(part[typ], val)
+        flow = nxt
         break
       end
     end
@@ -43,6 +42,7 @@ end
 puts "Part 1: #{ans}"
 
 range = (1..4000)
+
 init_state = {"x" => range, "m" => range, "a" => range, "s" => range}
 
 accepted = [] of Hash(String, Range(Int32, Int32))
@@ -52,37 +52,34 @@ queue = Deque.new(1, {init_state, "in"})
 while !queue.empty?
   state, flow = queue.shift
   
-  rules[flow].each do |rule|
-    typ, op, val, nxt = rule[:typ], rule[:op], rule[:val], rule[:nxt]
-    
+  rules[flow].each do |typ, op, val, nxt|
     if typ == "z"
       if nxt == "A"
-        accepted << state.dup
+        accepted << state
       elsif nxt != "R"
-        queue << {state.dup, nxt}
+        queue << {state, nxt}
       end
 
     else
-      rule_in_range = op == "<" ? 1..(val - 1) : (val + 1)..4000
-      rule_out_range = op == "<" ? val..4000 : 1..val
-
-      state_range = state[typ]
+      range_in = op == "<" ? 1..(val - 1) : (val + 1)..4000
+      range_ou = op == "<" ? val..4000 : 1..val
+      range_st = state[typ]
       
-      next_in_range = Math.max(state_range.begin, rule_in_range.begin)..Math.min(state_range.end, rule_in_range.end)
-      next_out_range = Math.max(state_range.begin, rule_out_range.begin)..Math.min(state_range.end, rule_out_range.end)
+      next_range_in = {range_st.begin, range_in.begin}.max..{range_st.end, range_in.end}.min
+      next_range_ou = {range_st.begin, range_ou.begin}.max..{range_st.end, range_ou.end}.min
       
-      if next_in_range.size > 0
+      if next_range_in.size > 0
         next_state = state.dup
-        next_state[typ] = next_in_range
+        next_state[typ] = next_range_in
         if nxt == "A"
-          accepted << next_state.dup
+          accepted << next_state
         elsif nxt != "R"
-          queue << {next_state.dup, nxt}
+          queue << {next_state, nxt}
         end
       end
 
-      if next_out_range.size > 0
-        state[typ] = next_out_range
+      if next_range_ou.size > 0
+        state[typ] = next_range_ou
       end
     end
   end
