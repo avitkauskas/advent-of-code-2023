@@ -47,23 +47,23 @@ while !queue.empty?
   end
 end
 
-tt = possible_locations.select { |r, c| r.in?(-rows...0) && c.in?(0...cols) }.size
-cc = possible_locations.select { |r, c| r.in?(0...rows) && c.in?(0...cols) }.size
+tt = possible_locations.count { |r, c| r.in?(-rows...0) && c.in?(0...cols) }
+cc = possible_locations.count { |r, c| r.in?(0...rows) && c.in?(0...cols) }
 
-nn = possible_locations.select { |r, c| r.in?(-(rows * 2)...-rows) && c.in?(0...cols) }.size
-ss = possible_locations.select { |r, c| r.in?((rows * 2)...(rows * 3)) && c.in?(0...cols) }.size
-ww = possible_locations.select { |r, c| r.in?(0...rows) && c.in?(-(cols * 2)...-cols) }.size
-ee = possible_locations.select { |r, c| r.in?(0...rows) && c.in?((cols * 2)...(cols * 3)) }.size
+nn = possible_locations.count { |r, c| r.in?(-(rows * 2)...-rows) && c.in?(0...cols) }
+ss = possible_locations.count { |r, c| r.in?((rows * 2)...(rows * 3)) && c.in?(0...cols) }
+ww = possible_locations.count { |r, c| r.in?(0...rows) && c.in?(-(cols * 2)...-cols) }
+ee = possible_locations.count { |r, c| r.in?(0...rows) && c.in?((cols * 2)...(cols * 3)) }
 
-nw = possible_locations.select { |r, c| r.in?(-rows...0) && c.in?(-cols...0) }.size
-ne = possible_locations.select { |r, c| r.in?(-rows...0) && c.in?(cols...(cols * 2)) }.size
-sw = possible_locations.select { |r, c| r.in?(rows...(rows * 2)) && c.in?(-cols...0) }.size
-se = possible_locations.select { |r, c| r.in?(rows...(rows * 2)) && c.in?(cols...(cols * 2)) }.size
+nw = possible_locations.count { |r, c| r.in?(-rows...0) && c.in?(-cols...0) }
+ne = possible_locations.count { |r, c| r.in?(-rows...0) && c.in?(cols...(cols * 2)) }
+sw = possible_locations.count { |r, c| r.in?(rows...(rows * 2)) && c.in?(-cols...0) }
+se = possible_locations.count { |r, c| r.in?(rows...(rows * 2)) && c.in?(cols...(cols * 2)) }
 
-nw1 = possible_locations.select { |r, c| r.in?(-(rows * 2)...-rows) && c.in?(-cols...0) }.size
-ne1 = possible_locations.select { |r, c| r.in?(-(rows * 2)...-rows) && c.in?(cols...(cols * 2)) }.size
-sw1 = possible_locations.select { |r, c| r.in?((rows * 2)...(rows * 3)) && c.in?(-cols...0) }.size
-se1 = possible_locations.select { |r, c| r.in?((rows * 2)...(rows * 3)) && c.in?(cols...(cols * 2)) }.size
+nw1 = possible_locations.count { |r, c| r.in?(-(rows * 2)...-rows) && c.in?(-cols...0) }
+ne1 = possible_locations.count { |r, c| r.in?(-(rows * 2)...-rows) && c.in?(cols...(cols * 2)) }
+sw1 = possible_locations.count { |r, c| r.in?((rows * 2)...(rows * 3)) && c.in?(-cols...0) }
+se1 = possible_locations.count { |r, c| r.in?((rows * 2)...(rows * 3)) && c.in?(cols...(cols * 2)) }
 
 n_tt = additional_fields * additional_fields
 n_cc = (additional_fields - 1) * (additional_fields - 1)
