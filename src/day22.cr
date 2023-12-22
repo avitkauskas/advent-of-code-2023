@@ -1,34 +1,30 @@
 bricks = File.read_lines("input/input22.txt")
   .map(&.split('~').map(&.split(',').map(&.to_i)))
+  .map { |(a, b)| p = a.zip(b); [p.map &.min, p.map &.max] }
 
 def indexes_of_bricks_with_lower_end_at(z, bricks)
-  bricks.map_with_index { |b, i| i if {b[0][2], b[1][2]}.min == z }.compact
-end
-
-def coord_ranges(brick)
-  s, e = brick
-  s.zip(e).map &.minmax
+  bricks.map_with_index { |b, i| i if b[0][2] == z }.compact
 end
 
 def top_of(bricks)
-  bricks.max_of { |b| {b[0][2], b[1][2]}.max }
+  bricks.max_of { |b| b[1][2] }
 end
 
 def empty_space_below(brick, bricks)
-  xb, yb, zb = coord_ranges(brick)
   bricks_below = bricks.select do |b|
-    x, y, z = coord_ranges(b)
-    z[1] < zb[0] && !(x[1] < xb[0] || x[0] > xb[1]) && !(y[1] < yb[0] || y[0] > yb[1])
+    b[1][2] < brick[0][2] &&
+      !(b[1][0] < brick[0][0] || b[0][0] > brick[1][0]) && 
+      !(b[1][1] < brick[0][1] || b[0][1] > brick[1][1])
   end
-  return zb[0] - 1 if bricks_below.empty?
-  zb[0] - top_of(bricks_below) - 1
+  return brick[0][2] - 1 if bricks_below.empty?
+  brick[0][2] - top_of(bricks_below) - 1
 end
 
 def bricks_supported(brick, bricks)
-  xb, yb, zb = coord_ranges(brick)
   bricks_right_above = bricks.map_with_index do |b, i|
-    x, y, z = coord_ranges(b)
-    i if z[0] == zb[1] + 1 && !(x[1] < xb[0] || x[0] > xb[1]) && !(y[1] < yb[0] || y[0] > yb[1])
+    i if b[0][2] == brick[1][2] + 1 && 
+      !(b[1][0] < brick[0][0] || b[0][0] > brick[1][0]) && 
+      !(b[1][1] < brick[0][1] || b[0][1] > brick[1][1])
   end.compact
 end
 
@@ -63,10 +59,10 @@ ans = bricks_possible_to_desintegrate(bricks).size
 puts "Part 1: #{ans}"
 
 def bricks_to_fall(idx, bricks)
-  _, _, z = coord_ranges(bricks[idx])
+  z = bricks[idx][1][2]
   bricks = bricks.clone
   bricks.delete_at(idx)
-  settle_bricks(bricks, z[1] + 1)
+  settle_bricks(bricks, z + 1)
 end
 
 ans = bricks.size.times.sum { |i| bricks_to_fall(i, bricks) }
