@@ -1,5 +1,5 @@
-bricks = File.read_lines("input/input22.txt").map(&.split('~').map(&.split(',').map(&.to_i)))
-# bricks = File.read_lines("input/test.txt").map(&.split('~').map(&.split(',').map(&.to_i)))
+bricks = File.read_lines("input/input22.txt")
+  .map(&.split('~').map(&.split(',').map(&.to_i)))
 
 def indexes_of_bricks_with_lower_end_at(z, bricks)
   bricks.map_with_index { |b, i| i if {b[0][2], b[1][2]}.min == z }.compact
@@ -32,11 +32,10 @@ def bricks_supported(brick, bricks)
   end.compact
 end
 
-def settle_bricks(bricks)
+def settle_bricks(bricks, from_row = 2)
   count = 0
-  row = 2
-  while row <= top_of(bricks)
-    idxs = indexes_of_bricks_with_lower_end_at(row, bricks)
+  while from_row <= top_of(bricks)
+    idxs = indexes_of_bricks_with_lower_end_at(from_row, bricks)
     idxs.each do |idx|
       below = empty_space_below(bricks[idx], bricks)
       if below > 0
@@ -45,7 +44,7 @@ def settle_bricks(bricks)
         count += 1
       end
     end
-    row += 1
+    from_row += 1
   end
   count
 end
@@ -64,9 +63,10 @@ ans = bricks_possible_to_desintegrate(bricks).size
 puts "Part 1: #{ans}"
 
 def bricks_to_fall(idx, bricks)
+  _, _, z = coord_ranges(bricks[idx])
   bricks = bricks.clone
   bricks.delete_at(idx)
-  settle_bricks(bricks)
+  settle_bricks(bricks, z[1] + 1)
 end
 
 ans = bricks.size.times.sum { |i| bricks_to_fall(i, bricks) }
