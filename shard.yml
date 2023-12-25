@@ -4,3 +4,6 @@ version: 0.0.1
 dependencies:
   priority-queue:
     github: spider-gazelle/priority-queue
+  matrix:
+    github: JacobUb/matrix
+
